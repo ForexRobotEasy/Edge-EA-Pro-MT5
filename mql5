@@ -1,0 +1,110 @@
+mql5
+//+------------------------------------------------------------------+
+//|                                                Edge EA Pro MT5  |
+//|                             Developed by Forex Robot Easy Team   |
+//|                                      Developer's Site: forexroboteasy.com |
+//+------------------------------------------------------------------+
+
+//Include necessary libraries and classes
+#include <Trade\Trade.mqh>
+#include <Technical\Indicators\Indicators.mqh>
+#include <Technical\Price\Price.mqh>
+#include <Technical\Wave\Wave.mqh>
+#include <Technical\MarketPattern\MarketPattern.mqh>
+#include <Technical\Fibonacci\Fibonacci.mqh>
+#include <ANN\ANN.mqh>
+#include <RiskManagement\RiskManagement.mqh>
+
+//Global variables
+CTrade trade;
+CIndicators indicators;
+CPrice price;
+CWave wave;
+CMarketPattern marketPattern;
+CFibonacci fibonacci;
+CANN neuralNetwork;
+CRiskManagement riskManagement;
+
+//+------------------------------------------------------------------+
+//|                        OnTick Event                              |
+//|     Processes inputs and generates trading signals              |
+//+------------------------------------------------------------------+
+void OnTick()
+{
+   // Get current price data
+   double currentPrice = price.GetBid();
+
+   // Get technical indicator values
+   double indicatorValue = indicators.GetValue();
+   
+   // Perform wave analysis
+   bool isWaveUp = wave.Analyze();
+   
+   // Identify market patterns using Fibonacci areas
+   bool isPatternDetected = marketPattern.DetectPattern(fibonacci.GetAreas());
+
+   // Process inputs through hidden layers of neural network
+   double neuralNetworkOutput = neuralNetwork.ProcessInputs(indicatorValue, isWaveUp, isPatternDetected);
+   
+   // Refine the output signal
+   double refinedSignal = RefineSignal(neuralNetworkOutput);
+   
+   // Execute trades based on predicted price movements
+   if(refinedSignal > 0)
+   {
+      trade.Buy();
+   }
+   else if(refinedSignal < 0)
+   {
+      trade.Sell();
+   }
+   
+   // Apply risk management mechanisms
+   riskManagement.ManageRisk();
+}
+
+//+------------------------------------------------------------------+
+//|                 RefineSignal Function                            |
+//|     Refines the output signal to improve prediction accuracy     |
+//+------------------------------------------------------------------+
+double RefineSignal(double signal)
+{
+   // Add your code here to refine the signal
+   return signal;
+}
+
+//+------------------------------------------------------------------+
+//|                    OnDeinit Event                                |
+//|        Cleans up resources and performs necessary tasks          |
+//+------------------------------------------------------------------+
+void OnDeinit(const int reason)
+{
+   // Add your code here to clean up resources and perform necessary tasks
+}
+
+//+------------------------------------------------------------------+
+//|                   OnInit Event                                   |
+//|       Initializes necessary resources and settings               |
+//+------------------------------------------------------------------+
+void OnInit()
+{
+   // Add your code here to initialize necessary resources and settings
+}
+
+//+------------------------------------------------------------------+
+//|                 OnStart Event                                    |
+//|      Starts the execution of the trading robot                    |
+//+------------------------------------------------------------------+
+void OnStart()
+{
+   // Add your code here to start the execution of the trading robot
+}
+
+//+------------------------------------------------------------------+
+//|                      Error Handling                              |
+//|      Handles any errors that may occur during execution           |
+//+------------------------------------------------------------------+
+void OnError(const int errorCode)
+{
+   // Add your code here to handle errors
+}
